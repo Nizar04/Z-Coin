@@ -1,5 +1,4 @@
 # Z-Coin
-Simulated cryptocurrency blockchain application
 
 
 ## Description
