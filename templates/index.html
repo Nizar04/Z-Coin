@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Interface</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1, h2 { color: #333; }
+        input, button { margin: 10px 0; padding: 5px; }
+        #response { background-color: #f0f0f0; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Blockchain Interface</h1>
+
+    <h2>Mine a Block</h2>
+    <button onclick="mineBlock()">Mine Block</button>
+
+    <h2>Create a Transaction</h2>
+    <input type="text" id="sender" placeholder="Sender Address">
+    <input type="text" id="recipient" placeholder="Recipient Address">
+    <input type="number" id="amount" placeholder="Amount">
+    <button onclick="createTransaction()">Create Transaction</button>
+
+    <h2>Check Balance</h2>
+    <input type="text" id="address" placeholder="Address">
+    <button onclick="checkBalance()">Check Balance</button>
+
+    <h2>Response</h2>
+    <div id="response"></div>
+
+    <script>
+        function mineBlock() {
+            axios.get('/mine')
+                .then(response => {
+                    document.getElementById('response').innerText = JSON.stringify(response.data, null, 2);
+                })
+                .catch(error => {
+                    document.getElementById('response').innerText = 'Error: ' + error.message;
+                });
+        }
+
+        function createTransaction() {
+            const sender = document.getElementById('sender').value;
+            const recipient = document.getElementById('recipient').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            axios.post('/transactions/new', { sender, recipient, amount })
+                .then(response => {
+                    document.getElementById('response').innerText = JSON.stringify(response.data, null, 2);
+                })
+                .catch(error => {
+                    document.getElementById('response').innerText = 'Error: ' + error.message;
+                });
+        }
+
+        function checkBalance() {
+            const address = document.getElementById('address').value;
+
+            axios.get(`/balance/${address}`)
+                .then(response => {
+                    document.getElementById('response').innerText = JSON.stringify(response.data, null, 2);
+                })
+                .catch(error => {
+                    document.getElementById('response').innerText = 'Error: ' + error.message;
+                });
+        }
+    </script>
+</body>
+</html>
